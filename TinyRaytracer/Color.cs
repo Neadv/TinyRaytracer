@@ -23,12 +23,9 @@ namespace TinyRaytracer
             this.a = a;
         }
 
-        public Color(float r, float g, float b, float a = 1.0f)
+        public static Color operator *(Color color, float value)
         {
-            this.r = (byte)(Math.Max(0.0f, Math.Min(1.0f, r)) * 255);
-            this.g = (byte)(Math.Max(0.0f, Math.Min(1.0f, g)) * 255);
-            this.b = (byte)(Math.Max(0.0f, Math.Min(1.0f, b)) * 255);
-            this.a = (byte)(Math.Max(0.0f, Math.Min(1.0f, a)) * 255);
+            return new Color((byte)(color.r * value), (byte)(color.g * value), (byte)(color.b * value));
         }
     }
 }

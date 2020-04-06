@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TinyRaytracer
 {
     class Raytracer
     {
         public List<Sphere> Spheres { get; } = new List<Sphere>();
+        public List<Light> Lights { get; } = new List<Light>();
 
         private int _width;
         private int _height;
@@ -33,7 +31,7 @@ namespace TinyRaytracer
                 for (int i = 0; i < _width; i++)
                 {
                     float x = (2 * (i + 0.5f) / _width - 1) * (float)Math.Tan(_fov / 2) * aspect_ratio;
-                    float y = (2 * (j + 0.5f) / _height - 1) * (float)Math.Tan(_fov / 2);
+                    float y = -(2 * (j + 0.5f) / _height - 1) * (float)Math.Tan(_fov / 2);
                     Vector3 dir = (new Vector3(x, y, -1)).Normalize();
                     _frame.SetPixel(i, j, CastRay(dir));
                 }
@@ -48,7 +46,14 @@ namespace TinyRaytracer
             if (!SceneIntersect(dir, out point, out normal, out material))
                 return new Color(50, 210, 230);
 
-            return material.DiffuseCollor;
+            float lightIntensity = 0;
+            foreach (var l in Lights)
+            {
+                var lightDir = (l.Position - point).Normalize();
+                lightIntensity += l.Intensity * Math.Max(0f, normal.Dot(lightDir));
+            }
+
+            return material.DiffuseCollor * lightIntensity;
         }
 
         private bool SceneIntersect(Vector3 dir, out Vector3 hit, out Vector3 normal, out Material material)

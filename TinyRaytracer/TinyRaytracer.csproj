@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Color.cs" />
     <Compile Include="FrameBuffer.cs" />
+    <Compile Include="Light.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
