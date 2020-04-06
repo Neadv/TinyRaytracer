@@ -8,26 +8,31 @@ namespace TinyRaytracer
 {
     class Sphere
     {
-        private Vector3 _center;
-        private float _radius;
+        public Vector3 Center { get; }
+        public float Radius { get; }
+        public Material Material { get; }
 
-        public Sphere(Vector3 center, float radius)
+        public Sphere(Vector3 center, float radius, Material material)
         {
-            _center = center;
-            _radius = radius;
+            Center = center;
+            Radius = radius;
+            Material = material;
         }
 
-        public bool RayIntersect(Vector3 orig, Vector3 dir, ref float dist)
+        public bool RayIntersect(Vector3 orig, Vector3 dir, out float dist)
         {
-            Vector3 pc = _center - orig;
+            Vector3 pc = Center - orig;
             Vector3 pcA = dir * dir.Dot(pc);
-            if ((pcA - _center).Length() > _radius)
+            if ((pcA - Center).Length() > Radius)
+            {
+                dist = -1;
                 return false;
-            float c = (float)Math.Sqrt(_radius * _radius - Math.Pow((_center - pcA).Length(), 2));
+            }
+            float c = (float)Math.Sqrt(Radius * Radius - Math.Pow((Center - pcA).Length(), 2));
             dist = pcA.Length() - c;
-            if (pc.Length() < _radius)
+            if (pc.Length() < Radius)
                 dist = pcA.Length() + c;
-            if (pc.Dot(dir) > 0)
+            if (pc.Dot(dir) < 0)
                 dist = c - pcA.Length();
             return true;
         }
