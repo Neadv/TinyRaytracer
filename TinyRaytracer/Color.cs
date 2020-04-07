@@ -25,7 +25,10 @@ namespace TinyRaytracer
 
         public static Color operator *(Color color, float value)
         {
-            return new Color((byte)(color.r * value), (byte)(color.g * value), (byte)(color.b * value));
+            byte r = (byte)Math.Min(255, color.r * value);
+            byte g = (byte)Math.Min(255, color.g * value);
+            byte b = (byte)Math.Min(255, color.b * value);
+            return new Color(r, g, b);
         }
 
         public static Color operator +(Color c1, Color c2)

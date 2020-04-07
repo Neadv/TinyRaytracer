@@ -47,14 +47,17 @@ namespace TinyRaytracer
             if (!SceneIntersect(dir, out point, out normal, out material))
                 return new Color(50, 210, 230);
 
-            float lightIntensity = 0;
+
+            float diffuseIntensity = 0;
+            float specularIntensity = 0;
             foreach (var l in Lights)
             {
                 var lightDir = (l.Position - point).Normalize();
-                lightIntensity += l.Intensity * Math.Max(0f, normal.Dot(lightDir));
-            }
 
-            return material.DiffuseCollor * lightIntensity;
+                diffuseIntensity += l.Intensity * Math.Max(0f, normal.Dot(lightDir));
+                specularIntensity += (float)Math.Pow(Math.Max(0f, Reflect(lightDir, normal).Dot(dir)), material.SpecularExponent) * l.Intensity;
+            }
+            return material.DiffuseCollor * (diffuseIntensity * material.Albedo[0]) + _lightColor*(specularIntensity*material.Albedo[1]);
         }
 
         private bool SceneIntersect(Vector3 dir, out Vector3 hit, out Vector3 normal, out Material material)
@@ -80,7 +83,7 @@ namespace TinyRaytracer
 
         private Vector3 Reflect(Vector3 I, Vector3 N)
         {
-            return I -  N * I.Dot(N)*2;
+            return I -  N *2 * I.Dot(N);
         }
     }
 }
