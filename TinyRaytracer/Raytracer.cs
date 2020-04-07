@@ -13,6 +13,7 @@ namespace TinyRaytracer
 
         private Vector3 _camPos = new Vector3();
         private float _fov = (float)Math.PI / 2.0f;
+        private Color _lightColor = Color.White;
 
         private FrameBuffer _frame;
 
@@ -75,6 +76,11 @@ namespace TinyRaytracer
             }
 
             return sphereDist < 1000;
+        }
+
+        private Vector3 Reflect(Vector3 I, Vector3 N)
+        {
+            return I -  N * I.Dot(N)*2;
         }
     }
 }

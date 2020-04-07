@@ -85,21 +85,5 @@ namespace TinyRaytracer
 
             return bitmap;
         }
-
-        //public Image GetBitmapTest()
-        //{
-        //    Bitmap bitmap = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-
-        //    for (int y = 0; y < Height; y++)
-        //    {
-        //        for (int x = 0; x < Width; x++)
-        //        {
-        //            var color = _image[x, y];
-        //            bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(color.r, color.g, color.b));
-        //        }
-        //    }
-
-        //    return bitmap;
-        //}
     }
 }

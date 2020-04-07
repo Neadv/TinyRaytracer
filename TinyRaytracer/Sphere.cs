@@ -19,17 +19,17 @@ namespace TinyRaytracer
         {
             Vector3 pc = Center - orig;
             Vector3 pcA = dir * dir.Dot(pc);
-            if ((pcA - Center).Length() > Radius)
+            if ((pcA - Center).Length > Radius)
             {
                 dist = -1;
                 return false;
             }
-            float c = (float)Math.Sqrt(Radius * Radius - Math.Pow((Center - pcA).Length(), 2));
-            dist = pcA.Length() - c;
-            if (pc.Length() < Radius)
-                dist = pcA.Length() + c;
+            float c = (float)Math.Sqrt(Radius * Radius - Math.Pow((Center - pcA).Length, 2));
+            dist = pcA.Length - c;
+            if (pc.Length < Radius)
+                dist = pcA.Length + c;
             if (pc.Dot(dir) < 0)
-                dist = c - pcA.Length();
+                dist = c - pcA.Length;
             return true;
         }
     }

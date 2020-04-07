@@ -27,5 +27,15 @@ namespace TinyRaytracer
         {
             return new Color((byte)(color.r * value), (byte)(color.g * value), (byte)(color.b * value));
         }
+
+        public static Color operator +(Color c1, Color c2)
+        {
+            Color color;
+            color.r = (byte)Math.Min(255, c1.r + c2.r);
+            color.g = (byte)Math.Min(255, c1.g + c2.g);
+            color.b = (byte)Math.Min(255, c1.b + c2.b);
+            color.a = 255;
+            return color;
+        }
     }
 }
