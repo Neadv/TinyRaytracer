@@ -11,8 +11,8 @@ namespace TinyRaytracer
         private int _width;
         private int _height;
 
-        private Vector3 _camPos = new Vector3();
-        private float _fov = (float)Math.PI / 2.0f;
+        private Vector3 _camPos = new Vector3(0, 0, 0);
+        private float _fov = (float)Math.PI / 3.0f;
         private Color _lightColor = Color.White;
 
         private FrameBuffer _frame;
@@ -44,7 +44,7 @@ namespace TinyRaytracer
             Vector3 point, normal;
             Material material;
 
-            if (!SceneIntersect(dir, out point, out normal, out material))
+            if (!SceneIntersect(_camPos, dir, out point, out normal, out material))
                 return new Color(50, 210, 230);
 
 
@@ -54,13 +54,24 @@ namespace TinyRaytracer
             {
                 var lightDir = (l.Position - point).Normalize();
 
+                //Shadow
+                var lightDist = (l.Position - point).Length;
+
+                var shadowOrig = lightDir.Dot(normal) < 0 ? point - normal * 0.001f : point + normal * 0.001f;
+
+                if (SceneIntersect(shadowOrig, lightDir, out Vector3 shadowPoint, out Vector3 shadowNormal, out Material tmpMat)
+                   && (shadowPoint - shadowOrig).Length < lightDist)
+                    continue;
+
+                //----------
+
                 diffuseIntensity += l.Intensity * Math.Max(0f, normal.Dot(lightDir));
                 specularIntensity += (float)Math.Pow(Math.Max(0f, Reflect(lightDir, normal).Dot(dir)), material.SpecularExponent) * l.Intensity;
             }
-            return material.DiffuseCollor * (diffuseIntensity * material.Albedo[0]) + _lightColor*(specularIntensity*material.Albedo[1]);
+            return material.DiffuseCollor * (diffuseIntensity * material.Albedo[0]) + _lightColor * (specularIntensity * material.Albedo[1]);
         }
 
-        private bool SceneIntersect(Vector3 dir, out Vector3 hit, out Vector3 normal, out Material material)
+        private bool SceneIntersect(Vector3 orig, Vector3 dir, out Vector3 hit, out Vector3 normal, out Material material)
         {
             float sphereDist = float.MaxValue;
             hit = new Vector3();
@@ -69,11 +80,11 @@ namespace TinyRaytracer
             foreach (var s in Spheres)
             {
                 float dist;
-                if(s.RayIntersect(_camPos, dir, out dist) && dist < sphereDist)
+                if (s.RayIntersect(orig, dir, out dist) && dist < sphereDist)
                 {
                     sphereDist = dist;
                     material = s.Material;
-                    hit = _camPos + dir * dist;
+                    hit = orig + dir * dist;
                     normal = (hit - s.Center).Normalize();
                 }
             }
@@ -83,7 +94,7 @@ namespace TinyRaytracer
 
         private Vector3 Reflect(Vector3 I, Vector3 N)
         {
-            return I -  N *2 * I.Dot(N);
+            return I - N * 2 * I.Dot(N);
         }
     }
 }

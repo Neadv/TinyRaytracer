@@ -16,10 +16,10 @@ namespace TinyRaytracer
             Material ivory = new Material(new Color(120, 120, 90), new Vector2(0.6f, 0.3f), 50);
             Material red = new Material(new Color(100, 30, 30), new Vector2(0.9f, 0.1f), 10);
 
-            raytracer.Spheres.Add(new Sphere(new Vector3(-4, 0.5f, -10), 2.5f, ivory));
-            raytracer.Spheres.Add(new Sphere(new Vector3(-3, -1.5f, -8), 2f, red));
-            raytracer.Spheres.Add(new Sphere(new Vector3(1, 0, -13), 3, red));
-            raytracer.Spheres.Add(new Sphere(new Vector3(6, 5, -13), 4, ivory));
+            raytracer.Spheres.Add(new Sphere(new Vector3(-3, 0, -16), 2, ivory));
+            raytracer.Spheres.Add(new Sphere(new Vector3(-1, -1.5f, -12), 2, red));
+            raytracer.Spheres.Add(new Sphere(new Vector3(1.5f, -0.5f, -18), 3, red));
+            raytracer.Spheres.Add(new Sphere(new Vector3(7, 5, -18), 4, ivory));
 
             raytracer.Lights.Add(new Light(new Vector3(-20, 20, 20), 1.5f));
             raytracer.Lights.Add(new Light(new Vector3(30, 50, -25), 1.8f));

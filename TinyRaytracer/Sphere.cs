@@ -17,19 +17,17 @@ namespace TinyRaytracer
 
         public bool RayIntersect(Vector3 orig, Vector3 dir, out float dist)
         {
-            Vector3 pc = Center - orig;
-            Vector3 pcA = dir * dir.Dot(pc);
-            if ((pcA - Center).Length > Radius)
+            Vector3 vpc = Center - orig;
+            Vector3 pc = dir * dir.Dot(vpc) + orig;
+            if ((pc - Center).Length > Radius || vpc.Dot(dir) < 0)
             {
                 dist = -1;
                 return false;
             }
-            float c = (float)Math.Sqrt(Radius * Radius - Math.Pow((Center - pcA).Length, 2));
-            dist = pcA.Length - c;
-            if (pc.Length < Radius)
-                dist = pcA.Length + c;
-            if (pc.Dot(dir) < 0)
-                dist = c - pcA.Length;
+            float d = (float)Math.Sqrt(Radius * Radius - Math.Pow((pc - Center).Length, 2));
+            dist = (pc - orig).Length - d;
+            if (dist < 0)
+                dist = (pc - orig).Length + d;
             return true;
         }
     }
