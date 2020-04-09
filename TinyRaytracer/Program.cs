@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace TinyRaytracer
 {
@@ -6,12 +7,17 @@ namespace TinyRaytracer
     {
         static void Main()
         {
-            int width = 1024;
-            int height = 728;
+            int width = 1024*4;
+            int height = 728*4;
+
+            Stopwatch sw = Stopwatch.StartNew();
 
             FrameBuffer frameBuffer = new FrameBuffer(width, height);
 
             Raytracer raytracer = new Raytracer(width, height, frameBuffer);
+
+            sw.Stop();
+            Console.WriteLine($"Create framebuffer - {sw.ElapsedMilliseconds} ms");
 
             Material ivory = new Material(new Color(120, 120, 90), new Vector4(0.6f, 0.3f, 0.1f, 0), 50, 1);
             Material red = new Material(new Color(100, 30, 30), new Vector4(0.9f, 0.1f, 0, 0), 10, 1);
@@ -27,10 +33,19 @@ namespace TinyRaytracer
             raytracer.Lights.Add(new Light(new Vector3(30, 50, -25), 1.8f));
             raytracer.Lights.Add(new Light(new Vector3(30, 20, 30), 1.7f));
 
+            sw.Restart();
+
             raytracer.Render();
+
+            sw.Stop();
+            Console.WriteLine($"Render - {sw.ElapsedMilliseconds} ms");
+            sw.Restart();
 
             var image = frameBuffer.GetBitmap();
             image.Save("Render.png");
+
+            sw.Stop();
+            Console.WriteLine($"Save in file - {sw.ElapsedMilliseconds} ms");
         }
     }
 }

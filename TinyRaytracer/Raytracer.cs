@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TinyRaytracer
 {
@@ -15,6 +16,7 @@ namespace TinyRaytracer
         private float _fov = (float)Math.PI / 3.0f;
         private Color _lightColor = Color.White;
         private int _maxDepth = 4;
+        private float _aspect_ratio;
 
         private FrameBuffer _frame;
 
@@ -23,21 +25,23 @@ namespace TinyRaytracer
             _width = width;
             _height = height;
             _frame = frameBuffer;
+            _aspect_ratio = (float)_width / _height; 
         }
 
         public void Render()
         {
-            float aspect_ratio = (float)_width / _height;
-            for (int j = 0; j < _height; j++)
+            Parallel.For(0, _height, RenderParallel);
+        }
+
+        private void RenderParallel(int j)
+        {
+            Parallel.For(0, _height, (i) =>
             {
-                for (int i = 0; i < _width; i++)
-                {
-                    float x = (2 * (i + 0.5f) / _width - 1) * (float)Math.Tan(_fov / 2) * aspect_ratio;
-                    float y = -(2 * (j + 0.5f) / _height - 1) * (float)Math.Tan(_fov / 2);
-                    Vector3 dir = (new Vector3(x, y, -1)).Normalize();
-                    _frame.SetPixel(i, j, CastRay(_camPos, dir));
-                }
-            }
+                float x = (2 * (i + 0.5f) / _width - 1) * (float)Math.Tan(_fov / 2) * _aspect_ratio;
+                float y = -(2 * (j + 0.5f) / _height - 1) * (float)Math.Tan(_fov / 2);
+                Vector3 dir = (new Vector3(x, y, -1)).Normalize();
+                _frame.SetPixel(i, j, CastRay(_camPos, dir));
+            });
         }
 
         private Color CastRay(Vector3 orig, Vector3 dir, int depth = 0)
