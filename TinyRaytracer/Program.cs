@@ -7,8 +7,8 @@ namespace TinyRaytracer
     {
         static void Main()
         {
-            int width = 1024*4;
-            int height = 728*4;
+            int width = 1024;
+            int height = 728;
 
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -46,6 +46,7 @@ namespace TinyRaytracer
 
             sw.Stop();
             Console.WriteLine($"Save in file - {sw.ElapsedMilliseconds} ms");
+            Console.ReadLine();
         }
     }
 }

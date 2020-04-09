@@ -35,13 +35,13 @@ namespace TinyRaytracer
 
         private void RenderParallel(int j)
         {
-            Parallel.For(0, _height, (i) =>
+            for (int i = 0; i < _width; i++)
             {
                 float x = (2 * (i + 0.5f) / _width - 1) * (float)Math.Tan(_fov / 2) * _aspect_ratio;
                 float y = -(2 * (j + 0.5f) / _height - 1) * (float)Math.Tan(_fov / 2);
                 Vector3 dir = (new Vector3(x, y, -1)).Normalize();
                 _frame.SetPixel(i, j, CastRay(_camPos, dir));
-            });
+            }
         }
 
         private Color CastRay(Vector3 orig, Vector3 dir, int depth = 0)
