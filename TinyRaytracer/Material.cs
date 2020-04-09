@@ -4,14 +4,16 @@ namespace TinyRaytracer
     struct Material
     {
         public Color DiffuseCollor;
-        public Vector2 Albedo;
+        public Vector4 Albedo;
         public float SpecularExponent;
+        public float RefractiveIndex;
 
-        public Material(Color diffuse, Vector2 albedo, float specularExp)
+        public Material(Color diffuse, Vector4 albedo, float specularExp, float refractiveIndex)
         {
             DiffuseCollor = diffuse;
             Albedo = albedo;
-            SpecularExponent = specularExp; 
+            SpecularExponent = specularExp;
+            RefractiveIndex = refractiveIndex;
         }
     }
 }

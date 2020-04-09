@@ -100,6 +100,9 @@ namespace TinyRaytracer
         public static Vector3 operator *(Vector3 v, float value) => new Vector3(v.x * value, v.y * value, v.z * value);
 
         public static Vector3 operator /(Vector3 v, float value) => v * (1.0f / value);
+         
+        public static Vector3 operator -(Vector3 v) =>  new Vector3(v.x* -1, v.y* -1, v.z* -1);
+
     }
 
     struct Vector4
